@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+TTY=""
+
+UNAMESTR=`uname`
+if [ "$UNAMESTR" == 'Linux' ] || [ "$UNAMESTR" == 'Darwin' ]; then
+    COMPOSE="docker-compose"
+else
+    COMPOSE="winpty docker-compose -f docker-compose.yml"
+fi
+
+if [ $# -gt 0 ];then
+    if [ "$1" == "up" ]; then
+        shift 1
+        cat file_id.diz
+        $COMPOSE up 
+    fi
+    if [ "$1" == "ssh" ]; then
+        container=$(docker ps -q --filter="NAME=$2")
+        docker exec -ti $container bash
+    fi
+    if [ "$1" == "destroy" ]; then
+        shift 1
+        # Stop all containers
+        docker stop $(docker ps -a -q)
+        # Delete all containers
+        docker rm $(docker ps -a -q)
+        # Delete all images
+        # docker rmi $(docker images -q)
+        docker system prune -a -f
+        docker volume prune -f
+    fi
+    else
+
+    printf "░▒▓█ Usage \n"
+    printf "./dev {option} \n\n"
+    echo "up      -- Brings up the dev environment"
+    echo "down    -- Brings down the dev environment"
+    echo "destroy -- Destorys all docker containers and images"
+    printf "\n"
+fi
