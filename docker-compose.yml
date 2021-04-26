@@ -1,44 +1,28 @@
-version: "3.3"
+version: '3'
 services:
-
-    # PHP service
-    app:
-        build: .
-        container_name: php-app
-        working_dir: /var/www/
-        volumes:
-            - ./public:/var/www
-        networks:
-            - php-app-network
-
-    # MySQL database service
-    db:
-        image: mysql:5.7
-        container_name: mysql-db
-        ports:
-            - "3306:3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
-        env_file:
-            - ./.env
-        networks:
-            - php-app-network
-
-    # Nginx service
-    nginx:
-        image: nginx:alpine
-        container_name: php-nginx
-        ports:
-            - 8000:80
-        volumes:
-            - ./public:/var/www
-            - ./nginx/conf.d/:/etc/nginx/conf.d/
-        networks:
-            - php-app-network
-
-networks:
-    php-app-network:
-        driver: bridge
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./app:/app
+  php:
+    build:
+      context: .
+      dockerfile: PHP.Dockerfile
+    volumes:
+      - ./app:/app
+  mysql:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'secret'
+      MYSQL_USER: 'beginning'
+      MYSQL_PASSWORD: 'secret'
+      MYSQL_DATABASE: 'tutorial'
+    volumes:
+      - mysqldata:/var/lib/mysql
+    ports:
+      - 3306:3306
+volumes:
+  mysqldata: {}

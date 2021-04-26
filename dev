@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
+
+export APP_PORT=${APP_PORT:-80}
+export MYSQL_PORT=${MYSQL_PORT:-3306}
+export LOCAL_IP=`ifconfig -a | grep inet | grep 0xffffff00 | cut -d\  -f2 | head -n 1`
+export XDEBUG_HOST=${XDEBUG_HOST:LOCAL_IP}
+
 TTY=""
+
+## CI sends BUILD_NUMBER env variable.
+if [ ! -z "$BUILD_NUMBER" ]; then
+    DOCKER_HOST="unix://var/run/docker.sock"
+    # Disable pseudo TTY for CI
+    TTY="-T"
+fi
 
 UNAMESTR=`uname`
 if [ "$UNAMESTR" == 'Linux' ] || [ "$UNAMESTR" == 'Darwin' ]; then
@@ -31,11 +44,12 @@ if [ $# -gt 0 ];then
         docker volume prune -f
     fi
     else
-
-    printf "░▒▓█ Usage \n"
+    docker ps
+    printf "\n--------------------------------------------------\n"
+    printf "\n  -- Usage -- \n\n"
     printf "./dev {option} \n\n"
     echo "up      -- Brings up the dev environment"
     echo "down    -- Brings down the dev environment"
     echo "destroy -- Destorys all docker containers and images"
-    printf "\n"
+    printf "\n--------------------------------------------------\n"
 fi
