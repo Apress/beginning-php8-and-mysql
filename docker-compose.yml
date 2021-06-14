@@ -13,7 +13,8 @@ services:
 
     # MySQL database service
     db:
-        image: mysql:5.7
+        platform: linux/x86_64
+        image: mysql:8.0
         container_name: mysql-db
         ports:
             - "3306:3306"

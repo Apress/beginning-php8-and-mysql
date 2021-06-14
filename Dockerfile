@@ -9,5 +9,6 @@ RUN docker-php-ext-install mysqli pdo_mysql
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+COPY ./public /var/www
 # Set working directory
 WORKDIR /var/www
