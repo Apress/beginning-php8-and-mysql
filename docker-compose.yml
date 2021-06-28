@@ -13,10 +13,12 @@ services:
 
     # MySQL database service
     db:
-        image: mysql:5.7
+        image: mysql:8.0
         container_name: mysql-db
         ports:
             - "3306:3306"
+        volumes:
+            - ./public:/var/www
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
@@ -32,7 +34,7 @@ services:
         image: nginx:alpine
         container_name: php-nginx
         ports:
-            - 8000:80
+            - 80:80
         volumes:
             - ./public:/var/www
             - ./nginx/conf.d/:/etc/nginx/conf.d/

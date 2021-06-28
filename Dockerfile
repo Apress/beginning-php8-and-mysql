@@ -11,3 +11,4 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
+COPY ./public /var/www/public
