@@ -4,7 +4,7 @@ $directory = '/var/www';
 $scanned_directory = array_diff(scandir($directory), array('..', '.'));
 foreach ($scanned_directory as $directory) {
     if (is_dir('/var/www/'.$directory)) {
-        echo '<a href="http://localhost:8000/'.$directory.'"><h2>'.$directory.'</h2></a><br />';
+        echo '<a href="http://localhost/'.$directory.'"><h2>'.$directory.'</h2></a><br />';
     }
 }
 try {
@@ -12,8 +12,8 @@ try {
     echo 'Current PHP version: ' . phpversion();
     echo '<br />';
 
-    $host = 'db';
-    $dbname = 'database';
+    $host = 'mysql-db';
+    $dbname = 'beginningPHP';
     $user = 'user';
     $pass = 'pass';
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";

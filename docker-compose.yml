@@ -20,6 +20,7 @@ services:
             - "3306:3306"
         volumes:
             - ./public:/var/www
+            - mysql-data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
@@ -45,3 +46,6 @@ services:
 networks:
     php-app-network:
         driver: bridge
+
+volumes: 
+  mysql-data:
