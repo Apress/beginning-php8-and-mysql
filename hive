@@ -56,17 +56,14 @@ if [ $# -gt 0 ];then
 (  _ \/ )( \(  _ \/ _  \                                        
  ) __/) __ ( ) __/) _  (                                        
 (__)  \_)(_/(__)  \____/                                        
- ____  ____  _  _                                               
-(    \(  __)/ )( \                                              
- ) D ( ) _) \ \/ /                                              
-(____/(____) \__/                                               
-
+--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--
 
 EOF
 	docker ps
+    printf "\n--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--"
 	printf "\n\n"
 	printf "usage:\n"
-	printf "./dev {option} \n\n"
+	printf "./hive {option} \n\n"
 	printf "up          -- Brings up the dev environment\n"
 	printf "build       -- Builds and Brings up the dev environment\n"
 	printf "mysqlshell  -- Connects to mysql container and mysql\n"
