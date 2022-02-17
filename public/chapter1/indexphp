@@ -2,13 +2,10 @@
 <?php
 $title = dirname(__FILE__);
 $title = explode('/',$title);
-if (isset($title[count($title)-1])) {
-	$title = $title[count($title)-1];
+if (isset($title[count($title)])) {
+	$title = $title[count($title)];
 } else {
 	$title = "Home";
-}
-if ($title == 'www') {
-	$title = 'Home';
 }
 
 ?>
@@ -25,18 +22,13 @@ if ($title == 'www') {
 	  </a>
 
 	  <ul class="nav nav-pills">
-	<li class="nav-item"><a href="../index.php" class="nav-link" aria-current="page">Home</a></li>
+	<li class="nav-item"><a href="../index.php" class="nav-link active" aria-current="page">Home</a></li>
 <?php
 $directory = '/var/www';
 $scanned_directory = array_diff(scandir($directory), array('..', '.','bootstrap'));
 foreach ($scanned_directory as $directory) {
 	if (is_dir('/var/www/'.$directory)) {
-		if ($title == $directory) {
-			$active = "active";
-		} else {
-			$active = '';
-		}
-		echo '<li class="nav-item"><a href="http://localhost/'.$directory.'" class="nav-link '.$active.'">'.$directory.'</a></li>';
+		echo '<li class="nav-item"><a href="http://localhost/'.$directory.'" class="nav-link">'.$directory.'</a></li>';
 	}
 }
 ?>
@@ -44,25 +36,7 @@ foreach ($scanned_directory as $directory) {
 	</header>
 <div>
 
-<?php
-$arrFiles = array();
-$handle = opendir('.');
-
-if ($handle) {
-    while (($entry = readdir($handle)) !== FALSE) {
-	    if (str_contains($entry,'php')) {
-		    $arrFiles[] = $entry;
-	    } else {
-		    continue;
-	    }
-    }
-}
-foreach ($arrFiles as $arrFile) {
-	echo "<a href='$arrFile'>$arrFile</a><br />";
-}
-
-closedir($handle);
-?>
+test
 </div>
 <?php
 try {
