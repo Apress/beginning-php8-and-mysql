@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+TTY=""
+
+UNAMESTR=`uname`
+if [ "$UNAMESTR" == 'Linux' ] || [ "$UNAMESTR" == 'Darwin' ]; then
+    COMPOSE="docker-compose"
+else
+    COMPOSE="winpty docker-compose -f docker-compose.yml"
+fi
+
+if [ $# -gt 0 ];then
+    if [ "$1" == "up" ]; then
+        shift 1
+        $COMPOSE up 
+    fi
+    if [ "$1" == "build" ]; then
+        shift 1
+        $COMPOSE build --parallel && $COMPOSE up 
+    fi
+    if [ "$1" == "test" ]; then
+        shift 1
+		docker exec -ti noc /var/www/html/vendor/bin/phpunit /var/www/noc/sbin/tests	
+    fi
+    if [ "$1" == "ssh" ]; then
+        shift 1
+        container=$(docker ps -q --filter="NAME=$1")
+        docker exec -ti ${container} bash
+    fi
+    if [ "$1" == "mysqlshell" ]; then
+        shift 1
+				docker exec  -it mysql-docker mysql -u root -h localhost -pmyrootpassword
+				docker exec  -it mysql-docker /bin/bash
+	fi
+    if [ "$1" == "purge" ]; then
+        shift 1
+        docker stop $(docker ps -a -q)
+        docker rm $(docker ps -a -q)
+        docker system prune -a -f
+    fi
+    if [ "$1" == "destroy" ]; then
+        shift 1
+        docker stop $(docker ps -a -q)
+        docker rm $(docker ps -a -q)
+        docker system prune -a -f
+        docker system prune -a -f --volumes
+    fi
+    else
+    clear
+    cat <<'EOF' 
+ ____  ____  ___  __  __ _  __ _  __  __ _   ___                
+(  _ \(  __)/ __)(  )(  ( \(  ( \(  )(  ( \ / __)               
+ ) _ ( ) _)( (_ \ )( /    //    / )( /    /( (_ \               
+(____/(____)\___/(__)\_)__)\_)__)(__)\_)__) \___/               
+ ____  _  _  ____  ____                                         
+(  _ \/ )( \(  _ \/ _  \                                        
+ ) __/) __ ( ) __/) _  (                                        
+(__)  \_)(_/(__)  \____/                                        
+--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--
+
+EOF
+	docker ps
+    printf "\n--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--oo--"
+	printf "\n\n"
+	printf "usage:\n"
+	printf "./hive {option} \n\n"
+	printf "up          -- Brings up the dev environment\n"
+	printf "build       -- Builds and Brings up the dev environment\n"
+	printf "mysqlshell  -- Connects to mysql container and mysql\n"
+	printf "ssh {name}  -- Connects to specified container by name\n"
+	printf "test        -- Run PHPUnit tests\n"
+	printf "purge       -- Purges all docker containers and images. (Keeps database volumes)\n"
+	printf "destroy     -- Destorys all docker containers and images\n"
+	printf "\n"
+fi
